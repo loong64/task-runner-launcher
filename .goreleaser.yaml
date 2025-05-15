@@ -1,3 +1,8 @@
+# Documentation at https://goreleaser.com
+
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
 version: 2
 
 before:
@@ -15,29 +20,29 @@ builds:
     env:
       - CGO_ENABLED=0
     goos:
-      - linux
       - darwin
-      - windows
       - freebsd
-      - openbsd
+      - linux
       - netbsd
+      - openbsd
+      - windows
     goarch:
       - 386
       - amd64
       - arm
       - arm64
+      - loong64
       - mips64le
       - ppc64le
       - s390x
       - riscv64
-      - loong64
     goarm:
       - 6
       - 7
 
 archives:
   - formats: [ 'tar.gz' ]
-    name_template: "{{ .Binary }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}{{- if .Arm }}v{{ .Arm }}{{ end }}"
+    name_template: "{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{- if .Arm }}v{{ .Arm }}{{ end }}"
     wrap_in_directory: false
     files:
       - README.md
@@ -53,11 +58,15 @@ checksum:
   split: true
 
 changelog:
-  sort: asc
+  use: github
+  sort: '' # use the output of `git log` as is
   filters:
     exclude:
-      - "^docs:"
-      - "^test:"
+      - '^docs:'
+      - '^test:'
+      - '^tests:'
+      - '^chore:'
+      - '^Merge pull request'
 
 release:
   github:
